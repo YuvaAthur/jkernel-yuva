@@ -5,14 +5,19 @@ from ipykernel.kernelbase import Kernel
 import base64
 import os
 
+#(1) fix to load file from current path
+import sys
+sys.path.append(os.getcwd())
+
+
 from wrapper import JWrapper
 
 # CUSTOMIZE HERE
 # Viewmat creates a temporary picture file in order to display it.
 # This is the path the kernel will use to find it.
-j_viewmat_image_location = "~/j64-804-user/temp/viewmat.png"
+j_viewmat_image_location = "~/80.sw-pkg/j64-804-user/temp/viewmat.png"
 
-class JKernel(Kernel):
+class JKernel(Kernel): #(2) j member function fix
     implementation = 'jkernel'
     implementation_version = '0.1'
     language_info = {
@@ -38,12 +43,18 @@ class JKernel(Kernel):
 
         generates_image = True if lines[-1].startswith("viewmat ") or lines[-1].startswith("viewrgb ") else False
 
-        output = self.j.sendlines(lines)
+        #(2) Simple send receive of lines works
+        #ToDo: Execute the lines!
+        tempO = self.j.sendlines(lines)
+        output = all(isinstance(n, basestring) for n in tempO)    
+        
 
         if not silent:
 
             def handle_text_response():
                 if not output:
+                    stream_content = {'name': 'stdout', 'text': output} #"undefined"}
+                    self.send_response(self.iopub_socket, 'stream', stream_content)
                     return
                 stream_content = {'name': 'stdout', 'text': output}
                 self.send_response(self.iopub_socket, 'stream', stream_content)
@@ -113,3 +124,9 @@ class JKernel(Kernel):
 if __name__ == '__main__':
     from ipykernel.kernelapp import IPKernelApp
     IPKernelApp.launch_instance(kernel_class=JKernel)
+    #(2) fix j member function
+    #print ("Hello")
+    #j = JWrapper()
+    #print(j.sendline("2+2"))
+    #jk = JKernel()
+    #jk.do_execute("2+2",False)

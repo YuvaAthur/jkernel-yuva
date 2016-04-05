@@ -7,7 +7,7 @@ import os
 
 # CUSTOMIZE HERE
 # J binary directory (the one with all the binaries)
-j_bin_path = os.path.expanduser("~/j64-804/bin")
+j_bin_path = os.path.expanduser("/Applications/j64-804/bin")
 
 def get_libj(binpath):
     if os.name == "nt":
@@ -30,6 +30,7 @@ def get_libj(binpath):
 class JWrapper:
     def __init__(self):
 
+        #print("JWrapper called")
         binpath = j_bin_path
 
         self.libj = get_libj(binpath)
@@ -74,23 +75,50 @@ class JWrapper:
 
     def sendline(self, line):
         self.output = None
-        self.libj.JDo(self.j, c_char_p(line.encode()))
+        self.libj.JDo(self.j, c_char_p(line.encode())) #(2) JDo unicode exec error?
+        # (2) simple line encode return works
+        # (2) does not work with done the way above :(!)
+        # (2) self.output = line.encode()
         if not self.output:
             return ""
         return self.output
 
     def sendlines(self, lines):
-        self.input_buffer = lines
+        output = lines
+        '''
+        self.input_buffer = eval(lines) # (2) hoping to convert string to array
         output = ""
         while self.input_buffer:
             line = self.input_buffer.pop(0)
             output += self.sendline(line)
+        '''
         return output
+        
 
 if __name__ == "__main__":
+#def main():
+    print ("hello")
     j = JWrapper()
     j.sendline("load 'viewmat'")
     j.sendline("load 'bmp'")
-    j.sendline("VISIBLE_jviewmat_ =: 0")
+    #j.sendline("VISIBLE_jviewmat_ =: 0")
     #j.sendline("viewmat i. 5 5")
+    '''
+    #(2) works
+    line = '1+1'
+    print(line) 
+    j.libj.JDo(j.j,line)
+    print (j.output)
+    #(2) works with encoding too
+    lines=[u'1+1','2+2']
+    output = None
+    while lines:
+        line = lines.pop(0)
+        print ('input is ' + line)
+        j.libj.JDo(j.j,c_char_p(line.encode()))
+        print (j.output)
+    '''
+    #(2) testing on method call - works    
+    lines=[u'1+1','2+2']
+    print (j.sendlines(lines))            
     j.close()
