@@ -1,9 +1,45 @@
-![](http://i.imgur.com/wL5ZTfu.png)
+# jkernel
 
-To install: place the files in ~/.ipython/kernels/jkernel* directory. Make sure that the paths to J at the top of wrapper.py and jkernel.py are correct. For those unfamiliar with Python, the file path on Windows needs backslashes escaped; for example: `"C:\\Program Files\\j64-804\\bin"`. Open `jupyter notebook` (or `ipython notebook`, but it's deprecated) from this directory.
+The jkernel is a Jupyter Notebook / J Integration.
 
-(* or the newer location: `~/.local/share/jupyter/kernels/jkernel` on Linux, `%APPDATA%\jupyter\kernels\jkernel` on Windows, `~/Library/Jupyter/kernels/jkernel` on OSX.)
+It is based on the same code as [qjide](http://www.github.com/martin-saurer/qjide).
 
-Requires IPython 3.0+, possibly 4.0+.
+## Prerequisites
 
-(in theory jkernel.py should be placed in Python's `dist-packages` directory to be accessible from everywhere, but that's not important at this stage)
+* [Jupyter Notebook](http://jupyter.org) Version 4.0.6 (other versions may also work). Recommended: [Anaconda from Continuum Analytics](https://www.continuum.io/downloads)
+
+* A working [J 804](http://www.jsoftware.com) installation
+
+## Installation
+
+### Kernel
+
+Copy the directory "jkernel" to your anaconda installation folder:
+
+* Mac OS X: \<anaconda-installation-folder\>/lib/python3.5/site-packages/
+
+* Linux: \<anaconda-installation-folder\>/lib/python3.5/site-packages/
+
+* Windows: \<anaconda-installation-folder\>\\Lib\\site-packages\\
+
+### Kernel Configuration
+
+* Edit qjide.cfg to specify your J installation folder
+
+* Edit qjide.cfg to specify your J binaries folder, especially on Arch Linux, where libj.so goes to /usr/lib/j8/bin
+
+### Kernel Definition
+
+Copy the directory "jkernel" under \<repository\>/kernel_definition/ to:
+
+* Mac OS X: ~/Library/Jupyter/kernels/
+
+* Linux: ~/.local/share/jupyter/kernels/
+
+* Windows: %APPDATA%\\Roaming\\jupyter\\kernels\\
+
+## Run
+
+Run: jupyter notebook (from the command line)
+
+Or: Use the anaconda launcher, and start "ipython-notebook"
