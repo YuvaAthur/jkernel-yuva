@@ -322,29 +322,29 @@ class J():
 
       # Setup J environment
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('ARGV_z_ =: \'\''))
+                        qjide_encode2('ARGV_z_ =: \'\''))
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('BINPATH_z_ =: \'' + self.JBin + '\''))
+                        qjide_encode2('BINPATH_z_ =: \'' + self.JBin + '\''))
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('0!:0 <\'' + self.JPro + '\''))
+                        qjide_encode2('0!:0 <\'' + self.JPro + '\''))
 
       # Load qjide.ijs
       self.IjsFile = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                   'qjide.ijs')
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('load \'' + self.IjsFile + '\''))
+                        qjide_encode2('load \'' + self.IjsFile + '\''))
 
       # Get J user folder
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('tmpstr_qjide_ =: jpath \'~user\''))
+                        qjide_encode2('tmpstr_qjide_ =: jpath \'~user\''))
       s = self.JDll.JGetM(self.JSession,
-                          qjide_encode3('tmpstr_qjide_'),
+                          qjide_encode2('tmpstr_qjide_'),
                           self.JType,
                           self.JRank,
                           self.JShap,
                           self.JData)
       s = string_at(self.JData.contents.value)
-      s = qjide_decode3(s)
+      s = qjide_decode2(s)
       if os.name == 'nt':
          s = s.replace('/','\\')
       else:
@@ -353,15 +353,15 @@ class J():
 
       # Set editor and console font sizes
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('EDITOR_FONT_SIZE_qjide_  =: ' +
+                        qjide_encode2('EDITOR_FONT_SIZE_qjide_  =: ' +
                         str(EditorFontSize )))
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('CONSOLE_FONT_SIZE_qjide_ =: ' +
+                        qjide_encode2('CONSOLE_FONT_SIZE_qjide_ =: ' +
                         str(ConsoleFontSize)))
 
       # Set client ip address
       s = self.JDll.JDo(self.JSession,
-                        qjide_encode3('cipaddr_qjide_ =: \'' +
+                        qjide_encode2('cipaddr_qjide_ =: \'' +
                         self.CipAddr + '\''))
 
       # Finally, we start the I/O loop as a thread
@@ -401,7 +401,7 @@ class J():
       else:
          # Handle output
          self.OLasAcc = time.strftime('%Y-%m-%d %H:%M:%S')
-         self.JOutStr += qjide_decode3(s)
+         self.JOutStr += qjide_decode2(s)
          self.JOutRdy = True
 
    # J window driver callback
@@ -421,7 +421,7 @@ class J():
       # Get string parameter
       sptr = pointer(c_long(pa+8*sizeof(c_long)))
       parm = string_at(sptr.contents.value)
-      parm = qjide_decode3(parm)
+      parm = qjide_decode2(parm)
 
       # Just for debugging
       if VerBose == True:
@@ -456,7 +456,7 @@ class J():
       self.OLasAcc = time.strftime('%Y-%m-%d %H:%M:%S')
       while self.JIolRun:
          try:
-            cmd = self.JInput(self.JSession,qjide_encode3('   '))
+            cmd = self.JInput(self.JSession,qjide_encode2('   '))
             self.JIsBusy = True
             self.JDll.JDo(self.JSession,cmd)
             self.JProStr = '   '
@@ -472,22 +472,22 @@ class J():
    # Do a J sentence
    def Exec(self,cmd):
       self.OLasAcc = time.strftime('%Y-%m-%d %H:%M:%S')
-      s = self.JDll.JDo(self.JSession,c_char_p(qjide_encode3(cmd)))
+      s = self.JDll.JDo(self.JSession,c_char_p(qjide_encode2(cmd)))
       return s
 
    # Get a string from a J variable
    def Gets(self,var):
       self.OLasAcc = time.strftime('%Y-%m-%d %H:%M:%S')
-      s = self.JDll.JGetM(self.JSession,qjide_encode3(var),
+      s = self.JDll.JGetM(self.JSession,qjide_encode2(var),
                           self.JType,self.JRank,self.JShap,self.JData)
       s = string_at(self.JData.contents.value)
-      s = qjide_decode3(s)
+      s = qjide_decode2(s)
       return s
 
    # Send a command to the I/O loop
    def Send(self,cmd):
       self.OLasAcc = time.strftime('%Y-%m-%d %H:%M:%S')
-      self.JInpStr = qjide_encode3(cmd)
+      self.JInpStr = qjide_encode2(cmd)
       self.JInpRdy = True
 
    # Receive output
@@ -510,7 +510,7 @@ class J():
    # J prompt string
    def Prom(self):
       self.OLasAcc = time.strftime('%Y-%m-%d %H:%M:%S')
-      return qjide_decode3(self.JProStr)
+      return qjide_decode2(self.JProStr)
 
    # Set J's current directory
    def Setd(self,dir):
@@ -619,7 +619,7 @@ class HelpHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type'  ,MimeType)
             self.send_header('Content-length',ln      )
             self.end_headers()
-            self.wfile.write(qjide_encode3(tx))
+            self.wfile.write(qjide_encode2(tx))
             self.wfile.flush()
 
             # Return
@@ -818,7 +818,7 @@ class ApplicationHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type'  ,MimeType)
             self.send_header('Content-length',ln      )
             self.end_headers()
-            self.wfile.write(qjide_encode3(tx))
+            self.wfile.write(qjide_encode2(tx))
             self.wfile.flush()
 
             # Return
@@ -1649,7 +1649,7 @@ class ApplicationHandler(BaseHTTPRequestHandler):
          self.send_header('Content-Type','application/json' )
          self.send_header('Content-length',str(len(JsonStr)))
          self.end_headers()
-         self.wfile.write(qjide_encode3(JsonStr))
+         self.wfile.write(qjide_encode2(JsonStr))
          return
 
       except:
@@ -1668,7 +1668,7 @@ class ApplicationHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type','application/json' )
             self.send_header('Content-length',str(len(JsonStr)))
             self.end_headers()
-            self.wfile.write(qjide_encode3(JsonStr))
+            self.wfile.write(qjide_encode2(JsonStr))
          except:
             print_exception_info()
   
