@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     jkernel
     ~~~~~~~
@@ -15,13 +14,7 @@ import sys
 import time
 import base64
 
-# Import Jupyter Kernel
-from ipykernel.kernelbase import Kernel
-
 # Append this files path to sys.path
 sys.path.append(os.path.dirname(__file__))
-sys.path.append(os.getcwd())
 
-# Import qjide as a module
-import qjide
 

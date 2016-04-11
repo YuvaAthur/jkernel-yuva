@@ -10,6 +10,9 @@
 #              set the following environment variable:
 #              export VERSIONER_PYTHON_PREFER_32_BIT=yes
 #
+# Extended by: Yuvaraj 11.04.2016
+# 
+# Note 2:      Testing for Py 2.7 compatibility
 ################################################################################
 
 ################################################################################
@@ -22,12 +25,13 @@ import sys
 import time
 import base64
 
+
 # Import Jupyter Kernel
 from ipykernel.kernelbase import Kernel
 
 # Append this files path to sys.path
 sys.path.append(os.path.dirname(__file__))
-sys.path.append(os.getcwd())
+# sys.path.append(os.getcwd())
 
 # Import qjide as a module
 import qjide
